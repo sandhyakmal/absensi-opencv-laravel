@@ -40,4 +40,8 @@ return [
         'key_plain' => env('FACE_API_KEY_PLAIN'),
     ],
 
+    'telegram' => [
+        'bot_token' => env('TELEGRAM_BOT_TOKEN'),
+    ],
+
 ];

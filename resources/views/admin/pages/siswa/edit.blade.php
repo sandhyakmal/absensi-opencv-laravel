@@ -54,6 +54,11 @@
                         </div>
 
                         <div class="form-group">
+                            <label>Chat ID Notifikasi</label>
+                            <input name="chat_id" value="{{ old('chat_id', $siswa->chat_id) }}" class="form-control">
+                        </div>
+
+                        <div class="form-group">
                             <label>Alamat</label>
                             <input name="alamat" value="{{ old('alamat', $siswa->alamat) }}" class="form-control">
                         </div>

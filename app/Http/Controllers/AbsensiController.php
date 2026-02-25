@@ -8,6 +8,7 @@ use App\Services\FaceClient;
 use App\Models\Siswa;
 use App\Models\Absensi;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 
 class AbsensiController extends Controller
 {
@@ -105,7 +106,49 @@ class AbsensiController extends Controller
             'percent' => $percent,
         ]);
 
-        // 8) response sukses
+        // 8) kirim notifikasi absensi
+        if ($siswa->chat_id) {
+
+            $tanggal = Carbon::now('Asia/Jakarta')->translatedFormat('d F Y');
+            $jam     = Carbon::now('Asia/Jakarta')->format('H:i');
+
+            $message =
+                    "📢 *Notifikasi Absensi Siswa*\n\n" .
+                    "```\n" .
+                    "Nama         : {$siswa->nama}\n" .
+                    "NIS          : {$siswa->nis}\n" .
+                    "Kelas        : {$siswa->kelas}\n" .
+                    "Tanggal      : {$tanggal}\n" .
+                    "Jam          : {$jam} WIB\n" .
+                    "Akurasi Wajah: {$percent}%\n" .
+                    "```\n\n" .
+                    "✅ Siswa telah melakukan absensi hari ini.\n" .
+                    "Terima kasih.";
+
+                try {
+
+                    $response = Http::timeout(5)
+                        ->connectTimeout(5)
+                        ->post(
+                            "https://api.telegram.org/bot" . config('services.telegram.bot_token') . "/sendMessage",
+                            [
+                                'chat_id' => $siswa->chat_id,
+                                'text' => $message,
+                                'parse_mode' => 'Markdown'
+                            ]
+                        );
+
+                    if (!$response->successful()) {
+                        \Log::error('Telegram response error: ' . $response->body());
+                    }
+
+                } catch (\Exception $e) {
+                    \Log::error('Telegram gagal: ' . $e->getMessage());
+                }
+
+            }
+
+        // 9) response sukses
         return response()->json([
             'ok' => true,
             'message' => 'ABSENSI_SAVED',

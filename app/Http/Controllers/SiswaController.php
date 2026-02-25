@@ -36,19 +36,21 @@ class SiswaController extends Controller
             'no_hp' => ['nullable','string','max:30'],
             'nama_ortu' => ['nullable','string','max:255'],
             'no_hp_ortu' => ['nullable','string','max:30'],
-            'alamat' => ['required','string'],
+            'alamat' => ['nullable','string','max:255'],
             'foto' => ['required','image','mimes:jpg,jpeg,png','max:5120'],
+            'chat_id' => ['required','string'],
         ]);
 
         // 1) simpan siswa ke DB dulu
         $siswa = Siswa::create([
-            'nis' => $data['nis'],
-            'nama' => $data['nama'],
-            'kelas' => $data['kelas'],
-            'no_hp' => $data['no_hp'] ?? null,
-            'alamat' => $data['alamat'],
-            'nama_ortu' => $data['nama_ortu'] ?? null,
-            'no_hp_ortu' => $data['no_hp_ortu'] ?? null,
+            'nis'           => $data['nis'],
+            'nama'          => $data['nama'],
+            'kelas'         => $data['kelas'],
+            'no_hp'         => $data['no_hp'] ?? null,
+            'alamat'        => $data['alamat'] ?? null,
+            'nama_ortu'     => $data['nama_ortu'] ?? null,
+            'no_hp_ortu'    => $data['no_hp_ortu'] ?? null,
+            'chat_id'       => $data['chat_id'],
         ]);
 
         // 2) simpan foto permanen ke storage/public/siswa/{NIS}/
@@ -105,6 +107,7 @@ class SiswaController extends Controller
             'nama_ortu'     => ['required','string','max:255'],
             'no_hp_ortu'    => ['nullable','string','max:15'],
             'alamat'        => ['nullable','string','max:255'],
+            'chat_id'       => ['nullable','string','max:255'],
 
             // foto opsional saat edit
             'foto'          => ['nullable','image','mimes:jpg,jpeg','max:5120'],

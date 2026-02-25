@@ -46,6 +46,11 @@
                         </div>
 
                         <div class="form-group">
+                            <label>Chat ID Notifikasi</label>
+                            <input name="chat_id" type="text" class="form-control">
+                        </div>
+
+                        <div class="form-group">
                             <label>Alamat</label>
                             <textarea name="alamat" class="form-control" required=""></textarea>
                         </div>
