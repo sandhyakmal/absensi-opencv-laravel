@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Services\FaceClient;
 use App\Models\Siswa;
 use App\Models\Absensi;
+use Carbon\Carbon;
 
 class AbsensiController extends Controller
 {
@@ -81,7 +82,22 @@ class AbsensiController extends Controller
             ], 200);
         }
 
-        // 6) simpan absensi
+        // 6) cek apakah sudah absen hari ini
+        $today = Carbon::now('Asia/Jakarta')->toDateString();
+
+        $sudahAbsen = Absensi::where('nis', $siswa->nis)
+            ->whereDate('created_at', $today)
+            ->exists();
+
+        if ($sudahAbsen) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'ALREADY_ATTENDANCE',
+                'detail' => 'Siswa sudah melakukan absensi hari ini.',
+            ], 200);
+        }
+
+        // 7) simpan absensi
         Absensi::create([
             'nis'     => $siswa->nis,
             'nama'    => $siswa->nama,
@@ -89,7 +105,7 @@ class AbsensiController extends Controller
             'percent' => $percent,
         ]);
 
-        // 7) response sukses
+        // 8) response sukses
         return response()->json([
             'ok' => true,
             'message' => 'ABSENSI_SAVED',

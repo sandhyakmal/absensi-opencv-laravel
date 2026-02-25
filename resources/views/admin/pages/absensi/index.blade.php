@@ -154,10 +154,31 @@
                         position: "topRight",
                         timeout: 4000
                     });
+                    return; // ⛔ stop di sini
+                }
 
-                    resultBox.className = "alert alert-danger";
-                    resultBox.textContent = data.detail || data.message || "FACE_API_ERROR";
-                    return;
+                // sukses absensi tersimpan
+                if (!data.ok) {
+                    // sudah absen
+                    if (data.message === "ALREADY_ATTENDANCE") {
+                        iziToast.warning({
+                            title: "Warning",
+                            message: data.detail,
+                            position: "topRight",
+                            timeout: 3000
+                        });
+                        return; // ⛔ stop supaya tidak masuk ke bawah
+                    }
+
+                    // error lainnya
+                    iziToast.error({
+                        title: "Error",
+                        message: data.detail || data.message || "Terjadi kesalahan",
+                        position: "topRight",
+                        timeout: 3000
+                    });
+
+                    return; // ⛔ penting
                 }
 
                 // sukses absensi tersimpan

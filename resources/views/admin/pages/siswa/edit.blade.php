@@ -28,11 +28,11 @@
                         <div class="form-group">
                             <label>Kelas</label>
                             <select class="form-control select2" name="kelas">
-                                <option value="1" {{ old('kelas', $siswa->kelas) == 1 ? 'selected' : '' }}>Kelas X
+                                <option value="1" {{ old('kelas', $siswa->kelas) == 1 ? 'selected' : '' }}>Kelas 1
                                 </option>
-                                <option value="2" {{ old('kelas', $siswa->kelas) == 2 ? 'selected' : '' }}>Kelas XI
+                                <option value="2" {{ old('kelas', $siswa->kelas) == 2 ? 'selected' : '' }}>Kelas 2
                                 </option>
-                                <option value="3" {{ old('kelas', $siswa->kelas) == 3 ? 'selected' : '' }}>Kelas XII
+                                <option value="3" {{ old('kelas', $siswa->kelas) == 3 ? 'selected' : '' }}>Kelas 3
                                 </option>
                             </select>
                         </div>

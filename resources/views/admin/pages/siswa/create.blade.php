@@ -24,9 +24,9 @@
                         <div class="form-group">
                             <label>Kelas</label>
                             <select class="form-control select2" name="kelas">
-                                <option value="X">Kelas X</option>
-                                <option value="XI">Kelas XI</option>
-                                <option value="XII">Kelas XII</option>
+                                <option value="1">Kelas 1</option>
+                                <option value="2">Kelas 2</option>
+                                <option value="3">Kelas 3</option>
                             </select>
                         </div>
 

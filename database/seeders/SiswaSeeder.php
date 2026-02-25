@@ -15,7 +15,7 @@ class SiswaSeeder extends Seeder
         $faker = fake('id_ID'); // faker Indonesia
 
         $kelasList = [
-            'X', 'XI', 'XII'
+            '1', '2', '3'
         ];
 
         $jurusanList = [
