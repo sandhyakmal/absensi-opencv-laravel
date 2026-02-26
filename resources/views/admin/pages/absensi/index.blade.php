@@ -41,6 +41,77 @@
             </div>
         </div>
     </div>
+
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-box">
+            <div class="spinner"></div>
+            <div class="loading-text">Sedang memproses absensi...</div>
+            <div class="loading-sub">Mohon tunggu sebentar</div>
+        </div>
+    </div>
+
+    <style>
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+        }
+
+        .loading-box {
+            background: #ffffff;
+            padding: 30px 40px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.2s ease-in-out;
+        }
+
+        .loading-text {
+            margin-top: 15px;
+            font-weight: 600;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .loading-sub {
+            font-size: 13px;
+            color: #777;
+            margin-top: 5px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #eee;
+            border-top: 5px solid #4f46e5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: auto;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
 @endsection
 
 @push('scripts')
@@ -92,9 +163,28 @@
             if (stopBtn) stopBtn.disabled = true;
         }
 
+        function showLoading() {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.style.display = "flex";
+            document.body.style.overflow = "hidden";
+
+            // cegah user keluar halaman saat proses
+            window.onbeforeunload = function() {
+                return "Absensi sedang diproses. Yakin ingin keluar?";
+            };
+        }
+
+        function hideLoading() {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.style.display = "none";
+            document.body.style.overflow = "auto";
+            window.onbeforeunload = null;
+        }
+
         async function hitRecognizeOnce() {
             if (busy) return;
             busy = true;
+            showLoading(); // 🔥 tampilkan loading
 
             try {
                 if (!stream) {
@@ -212,6 +302,10 @@
                 console.error(e);
             } finally {
                 busy = false;
+                hideLoading(); // 🔥 sembunyikan loading
+
+                const absenBtn = document.getElementById('btn-absen');
+                if (absenBtn) absenBtn.disabled = false;
             }
         }
 
