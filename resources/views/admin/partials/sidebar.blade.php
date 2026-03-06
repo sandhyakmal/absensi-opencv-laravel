@@ -11,17 +11,29 @@
                 <i class="fas fa-fire"></i> <span>Dashboard</span>
             </a>
         </li>
-        <li class="{{ request()->routeIs('absensi.*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('absensi.index') }}">
+
+        {{-- <li class="{{ request()->routeIs('absensi.*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('absensi.in.index') }}">
                 <i class="far fa-file"></i><span> Absensi</span>
             </a>
+        </li> --}}
+
+        <li class="dropdown {{ request()->routeIs('absensi.*') ? 'active' : '' }}">
+            <a href="#" class="nav-link has-dropdown"><i class="far fa-file"></i> <span>Absensi</span></a>
+            <ul class="dropdown-menu">
+                <li class="{{ request()->routeIs('absensi.inIndex') ? 'active' : '' }}"><a class="nav-link"
+                        href="{{ route('absensi.inIndex') }}">Absensi IN</a></li>
+                <li class="{{ request()->routeIs('absensi.outIndex') ? 'active' : '' }}"><a class="nav-link"
+                        href="{{ route('absensi.outIndex') }}">Absensi Out</a></li>
+            </ul>
         </li>
-        </li>
+
         <li class="{{ request()->routeIs('siswa.*') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('siswa.index') }}">
                 <i class="fas fa-user"></i> <span>Data Siswa</span>
             </a>
         </li>
+
         <li class="dropdown {{ request()->routeIs('reports.*') ? 'active' : '' }}">
             <a href="#" class="nav-link has-dropdown"><i class="far fa-file-alt"></i> <span>Laporan</span></a>
             <ul class="dropdown-menu">
@@ -31,6 +43,7 @@
                         href="{{ route('reports.absensi') }}">Laporan Absensi</a></li>
             </ul>
         </li>
+
         {{-- <li class="dropdown {{ request()->routeIs('reports.*') ? 'active' : '' }}">
             <a href="#" class="nav-link has-dropdown"><i class="fas fa-ellipsis-h"></i> <span>Setting</span></a>
             <ul class="dropdown-menu">

@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Absensi')
+@section('title', 'Absensi Out')
 
 @section('content')
 
@@ -10,7 +10,7 @@
             <div class="col-md-7">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Absensi</h4>
+                        <h4>Absensi Out</h4>
                     </div>
                     <div class="card-body">
                         <video id="video" autoplay playsinline
@@ -18,7 +18,7 @@
                         <canvas id="canvas" style="display:none;"></canvas>
 
                         <div class="mt-3">
-                            <button class="btn btn-primary" id="btn-absen">Lakukan Absen</button>
+                            <button class="btn btn-primary" id="btn-absen">Lakukan Absen Out</button>
                             <button class="btn btn-light" id="btn-stop" disabled>Stop Kamera</button>
                         </div>
 
@@ -32,7 +32,7 @@
             <div class="col-md-5">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Hasil Absensi</h4>
+                        <h4>Hasil Absensi Out</h4>
                     </div>
                     <div class="card-body">
                         <div id="resultBox" class="alert alert-light">Belum ada hasil.</div>
@@ -45,7 +45,7 @@
     <div id="loadingOverlay" class="loading-overlay">
         <div class="loading-box">
             <div class="spinner"></div>
-            <div class="loading-text">Sedang memproses absensi...</div>
+            <div class="loading-text">Sedang memproses absensi out...</div>
             <div class="loading-sub">Mohon tunggu sebentar</div>
         </div>
     </div>

@@ -12,9 +12,9 @@ use Illuminate\Support\Facades\Http;
 
 class AbsensiController extends Controller
 {
-    public function index()
+    public function inIndex()
     {
-        return view('admin.pages.absensi.index');
+        return view('admin.pages.absensi.indexIn');
     }
 
     public function recognize(Request $request, FaceClient $faceApi)
@@ -158,5 +158,10 @@ class AbsensiController extends Controller
                 'percent' => $percent,
             ]]
         ]);
+    }
+
+    public function outIndex()
+    {
+        return view('admin.pages.absensi.indexOut');
     }
 }
