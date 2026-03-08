@@ -28,44 +28,30 @@
                 </div>
                 <div class="card-wrap">
                     <div class="card-header">
-                        <h4>Total Absensi Hari Ini</h4>
+                        <h4>Total Absensi Masuk Hari Ini</h4>
                     </div>
                     <div class="card-body">
-                        {{ $totalAbsensi }}
-                    </div>
-                </div>
-            </div>
-        </div>
-        {{-- <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-            <div class="card card-statistic-1">
-                <div class="card-icon bg-danger">
-                    <i class="far fa-newspaper"></i>
-                </div>
-                <div class="card-wrap">
-                    <div class="card-header">
-                        <h4>News</h4>
-                    </div>
-                    <div class="card-body">
-                        42
+                        {{ $totalAbsensiMasuk }}
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-lg-3 col-md-6 col-sm-6 col-12">
             <div class="card card-statistic-1">
-                <div class="card-icon bg-success">
-                    <i class="fas fa-circle"></i>
+                <div class="card-icon bg-danger">
+                    <i class="far fa-newspaper"></i>
                 </div>
                 <div class="card-wrap">
                     <div class="card-header">
-                        <h4>Online Users</h4>
+                        <h4>Total Absensi Keluar Hari Ini</h4>
                     </div>
                     <div class="card-body">
-                        47
+                        {{ $totalAbsensiKeluar }}
                     </div>
                 </div>
             </div>
-        </div> --}}
+        </div>
+
     </div>
 
 

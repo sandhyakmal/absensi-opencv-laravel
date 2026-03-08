@@ -38,8 +38,9 @@ Route::middleware(AuthWithMessage::class)->group(function () {
 
     Route::prefix('absensi')->name('absensi.')->group(function () {
         Route::get('/in', [AbsensiController::class, 'inIndex'])->name('inIndex');
-        Route::post('/recognize', [AbsensiController::class, 'recognize'])->name('recognize');
+        Route::post('/recognizeIn', [AbsensiController::class, 'recognizeIn'])->name('recognizeIn');
         Route::get('/out', [AbsensiController::class, 'outIndex'])->name('outIndex');
+        Route::post('/recognizeOut', [AbsensiController::class, 'recognizeOut'])->name('recognizeOut');
     });
 
 });

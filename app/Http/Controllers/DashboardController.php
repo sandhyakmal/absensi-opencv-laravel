@@ -11,8 +11,13 @@ class DashboardController extends Controller
      public function index()
     {
         $totalSiswa = Siswa::count();
-        $totalAbsensi = Absensi::whereDate('created_at', now())->count();
+        $totalAbsensiMasuk = Absensi::whereDate('created_at', now())
+                        ->where('type_absensi', 'Masuk')
+                        ->count();
+        $totalAbsensiKeluar = Absensi::whereDate('created_at', now())
+                        ->where('type_absensi', 'Masuk')
+                        ->count();
 
-        return view('admin.dashboard', compact('totalSiswa', 'totalAbsensi'));
+        return view('admin.dashboard', compact('totalSiswa', 'totalAbsensiMasuk', 'totalAbsensiKeluar'));
     }
 }

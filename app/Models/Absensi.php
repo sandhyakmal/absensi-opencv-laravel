@@ -9,9 +9,9 @@ class Absensi extends Model
 {
     use HasFactory;
 
-    protected $table = 'absensi'; // <-- ini yang penting
+    protected $table = 'absensi';
 
     protected $fillable = [
-        'nis', 'nama', 'kelas', 'percent'
+        'nis', 'nama', 'kelas', 'percent', 'type_absensi'
     ];
 }

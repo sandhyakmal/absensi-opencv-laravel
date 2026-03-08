@@ -184,27 +184,27 @@
         async function hitRecognizeOnce() {
             if (busy) return;
             busy = true;
-            showLoading(); // 🔥 tampilkan loading
+
+            const absenBtn = document.getElementById('btn-absen');
+            if (absenBtn) absenBtn.disabled = true;
+
+            showLoading();
 
             try {
                 if (!stream) {
                     await openCamera();
-                    if (!stream) {
-                        busy = false;
-                        return;
-                    }
+                    if (!stream) return;
                 }
 
                 const w = video.videoWidth;
                 const h = video.videoHeight;
+
                 if (!w || !h) {
                     resultBox.className = "alert alert-warning";
                     resultBox.textContent = "Kamera belum siap. Coba klik lagi...";
-                    busy = false;
                     return;
                 }
 
-                // snapshot
                 canvas.width = w;
                 canvas.height = h;
                 const ctx = canvas.getContext('2d');
@@ -214,30 +214,53 @@
                 const fd = new FormData();
                 fd.append('image', blob, 'frame.jpg');
 
-                // hit Laravel -> forward ke FastAPI recognize
-                const res = await fetch("{{ route('absensi.recognize') }}", {
-                    method: "POST",
-                    headers: {
-                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                    },
-                    body: fd
-                });
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000);
 
+                let res;
                 let data;
 
                 try {
-                    data = await res.json();
-                } catch (e) {
-                    iziToast.error({
-                        title: "Error",
-                        message: "Server mengembalikan response yang tidak valid.",
-                        position: "topRight",
-                        timeout: 4000
+                    res = await fetch("{{ route('absensi.recognizeIn') }}", {
+                        method: "POST",
+                        headers: {
+                            "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                        },
+                        body: fd,
+                        signal: controller.signal
                     });
-                    return;
+
+                    try {
+                        data = await res.json();
+                    } catch (e) {
+                        iziToast.error({
+                            title: "Error",
+                            message: "Server mengembalikan response yang tidak valid.",
+                            position: "topRight",
+                            timeout: 4000
+                        });
+                        return;
+                    }
+                } catch (err) {
+                    if (err.name === "AbortError") {
+                        resultBox.className = "alert alert-danger";
+                        resultBox.textContent =
+                        "Request recognize timeout. Server tidak merespons lebih dari 10 detik.";
+
+                        iziToast.error({
+                            title: "Timeout",
+                            message: "Request recognize timeout. Server tidak merespons lebih dari 10 detik.",
+                            position: "topRight",
+                            timeout: 4000
+                        });
+                        return;
+                    }
+
+                    throw err;
+                } finally {
+                    clearTimeout(timeoutId);
                 }
 
-                // kalau HTTP status error (mis 500)
                 if (!res.ok) {
                     iziToast.error({
                         title: "Error",
@@ -245,12 +268,10 @@
                         position: "topRight",
                         timeout: 4000
                     });
-                    return; // ⛔ stop di sini
+                    return;
                 }
 
-                // sukses absensi tersimpan
                 if (!data.ok) {
-                    // sudah absen
                     if (data.message === "ALREADY_ATTENDANCE") {
                         iziToast.warning({
                             title: "Warning",
@@ -258,21 +279,18 @@
                             position: "topRight",
                             timeout: 3000
                         });
-                        return; // ⛔ stop supaya tidak masuk ke bawah
+                        return;
                     }
 
-                    // error lainnya
                     iziToast.error({
                         title: "Error",
                         message: data.detail || data.message || "Terjadi kesalahan",
                         position: "topRight",
                         timeout: 3000
                     });
-
-                    return; // ⛔ penting
+                    return;
                 }
 
-                // sukses absensi tersimpan
                 if (data.ok && data.message === "ABSENSI_SAVED") {
                     const r = (Array.isArray(data.results) && data.results.length) ? data.results[0] : null;
 
@@ -286,7 +304,6 @@
                     });
                 }
 
-                // update resultBox
                 if (data.ok && Array.isArray(data.results) && data.results.length) {
                     const r = data.results[0];
                     resultBox.className = "alert alert-success";
@@ -298,13 +315,19 @@
 
             } catch (e) {
                 resultBox.className = "alert alert-danger";
-                resultBox.textContent = "Error: " + e;
+                resultBox.textContent = "Error: " + (e?.message || e);
                 console.error(e);
+
+                iziToast.error({
+                    title: "Error",
+                    message: e?.message || "Terjadi kesalahan",
+                    position: "topRight",
+                    timeout: 4000
+                });
             } finally {
                 busy = false;
-                hideLoading(); // 🔥 sembunyikan loading
+                hideLoading();
 
-                const absenBtn = document.getElementById('btn-absen');
                 if (absenBtn) absenBtn.disabled = false;
             }
         }
