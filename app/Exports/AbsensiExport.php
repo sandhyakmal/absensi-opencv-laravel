@@ -28,7 +28,7 @@ class AbsensiExport implements FromArray, WithCustomStartCell, WithEvents, WithS
     public function array(): array
     {
         $data = [];
-        $data[] = ['No', 'NIS', 'Nama Siswa', 'Kelas', 'Tanggal Absen'];
+        $data[] = ['No', 'NIS', 'Nama Siswa', 'Kelas', 'Tanggal Absen', 'Tipe Absensi'];
 
         $no = 1;
         foreach ($this->rows as $r) {
@@ -38,6 +38,7 @@ class AbsensiExport implements FromArray, WithCustomStartCell, WithEvents, WithS
                 $r['nama'],
                 $r['kelas'],
                 $r['tanggal_absen'],
+                $r['type_absensi'],
             ];
         }
         return $data;
@@ -56,21 +57,21 @@ class AbsensiExport implements FromArray, WithCustomStartCell, WithEvents, WithS
             AfterSheet::class => function (AfterSheet $event) {
                 $sheet = $event->sheet->getDelegate();
 
-                // ====== MERGE A1:E1 dan A2:E2 + CENTER ======
+                // ====== MERGE A1:F1 dan A2:F2 + CENTER ======
                 $sheet->setCellValue('A1', 'LAPORAN SISWA');
-                $sheet->mergeCells('A1:E1');
+                $sheet->mergeCells('A1:F1');
                 $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
                 $sheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
                 $sheet->setCellValue('A2', "Tanggal : {$this->tanggal} ");
-                $sheet->mergeCells('A2:E2');
+                $sheet->mergeCells('A2:F2');
                 $sheet->getStyle('A2')->getFont()->setBold(true);
                 $sheet->getStyle('A2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
-                // ====== BORDER untuk tabel A5:G(lastRow) ======
+                // ====== BORDER untuk tabel A5:F(lastRow) ======
                 $lastRow = $sheet->getHighestRow();
 
-                $sheet->getStyle("A5:E{$lastRow}")->applyFromArray([
+                $sheet->getStyle("A5:F{$lastRow}")->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -79,11 +80,11 @@ class AbsensiExport implements FromArray, WithCustomStartCell, WithEvents, WithS
                 ]);
 
                 // Header tabel center
-                $sheet->getStyle('A5:E5')->getAlignment()->setHorizontal(
+                $sheet->getStyle('A5:F5')->getAlignment()->setHorizontal(
                     Alignment::HORIZONTAL_CENTER
                 );
 
-                $sheet->getStyle("A6:E{$lastRow}")
+                $sheet->getStyle("A6:F{$lastRow}")
                 ->getAlignment()
                 ->setHorizontal(Alignment::HORIZONTAL_CENTER)
                 ->setVertical(Alignment::VERTICAL_CENTER);
@@ -94,6 +95,7 @@ class AbsensiExport implements FromArray, WithCustomStartCell, WithEvents, WithS
                 $sheet->getColumnDimension('C')->setWidth(20);
                 $sheet->getColumnDimension('D')->setWidth(15);
                 $sheet->getColumnDimension('E')->setWidth(14);
+                $sheet->getColumnDimension('F')->setWidth(14);
 
             }
         ];

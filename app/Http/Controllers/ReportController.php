@@ -100,7 +100,8 @@ class ReportController extends Controller
                 nis as nis,
                 nama as nama,
                 kelas as kelas,
-                created_at as tanggal_absen
+                created_at as tanggal_absen,
+                type_absensi as type_absensi
             ")
             ->orderBy('created_at', 'asc')
             ->get()
@@ -109,6 +110,7 @@ class ReportController extends Controller
                 'nama'          => $r->nama,
                 'kelas'         => $r->kelas,
                 'tanggal_absen' => $r->tanggal_absen,
+                'type_absensi'  => $r->type_absensi,
             ]);
 
         $filename = "laporan_absensi.xlsx";
