@@ -9,6 +9,7 @@ use App\Models\Siswa;
 use App\Models\Absensi;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class AbsensiController extends Controller
 {
@@ -143,11 +144,11 @@ class AbsensiController extends Controller
                         );
 
                     if (!$response->successful()) {
-                        \Log::error('Telegram response error: ' . $response->body());
+                        Log::error('Telegram response error: ' . $response->body());
                     }
 
                 } catch (\Exception $e) {
-                    \Log::error('Telegram gagal: ' . $e->getMessage());
+                    Log::error('Telegram gagal: ' . $e->getMessage());
                 }
 
             }
@@ -295,11 +296,11 @@ class AbsensiController extends Controller
                         );
 
                     if (!$response->successful()) {
-                        \Log::error('Telegram response error: ' . $response->body());
+                        Log::error('Telegram response error: ' . $response->body());
                     }
 
                 } catch (\Exception $e) {
-                    \Log::error('Telegram gagal: ' . $e->getMessage());
+                    Log::error('Telegram gagal: ' . $e->getMessage());
                 }
 
             }
